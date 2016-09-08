@@ -26,5 +26,5 @@ if __name__ == '__main__':
     Et.dump(tree)
     root = Et.parse('sample.xml').getroot()
     indent(root)
-    Et.dump(root)
+    # Et.dump(root)
     
