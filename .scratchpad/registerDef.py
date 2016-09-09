@@ -1,10 +1,10 @@
 GlobalregisterDict = {}
 class bitfeild:
-    def __init__(self,parrentRegister,attrib,fields = []):
+    def __init__(self, parrentRegister, attrib, fields = []):
         self.parrentRegister = parrentRegister
         self.name = attrib['name']
         self.caption = attrib['caption']
-        self.mask = attrib['mask']'
+        self.mask = attrib['mask']
         '''Empy field means single bit'''
         self.fields = fields
 

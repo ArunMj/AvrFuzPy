@@ -1,6 +1,6 @@
 import xml.etree.ElementTree  as Et
 from registerDef import *
-def getValueGroupsDict(node,path):
+def getValueGroupDict(node,path):
     valueGroups = {}
     for valueGroupnode in node.findall(path):
         values = []
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     xmltree = Et.parse('sample.xml')
     root =  xmltree.getroot()
     #fuse Module
-    valueGroups = getValueGroupsDict(root,"./modules/module/[@name='FUSE']//value-group")
+    valueGroupDict = getValueGroupDict(root, "./modules/module/[@name='FUSE']//value-group")
     
     fuseRegisters_node =   root.findall("./modules/module/[@name='FUSE']//register")
     
@@ -24,6 +24,9 @@ if __name__ == '__main__':
         bitFields = []
         for bitfieldNode in registerNode.findall('./bitfield'):
             attr = bitfieldNode.attrib
-            bf = bitfeild(reg,attr).mask
-            
+            if attr.has_key('values') and valueGroupDict.has_key(attr['values']):
+                bf = bitfeild(reg, attr, valueGroupDict[attr['values']])
+            else:
+                bf = bitfeild(reg,attr)
+            bitFields.append(bf)
 print GlobalregisterDict
