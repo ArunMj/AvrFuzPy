@@ -1,32 +1,51 @@
 import xml.etree.ElementTree  as Et
 from registerDef import *
+
+'''returns value-group as dictionary from given path glob
+    format {groupname: [{caption:,name:,value:},,,]}'''
 def getValueGroupDict(node,path):
     valueGroups = {}
     for valueGroupnode in node.findall(path):
         values = []
         for valueNode in valueGroupnode.findall("./value"):
             values.append(valueNode.attrib)
+            # attrib is in format {'caption': 'Brown-out', 'name': '4V3', 'value': '0x04'}
         valueGroups[valueGroupnode.attrib['name']] = values
+    # print valueGroups
     return valueGroups
 
-registersDict = {}
+#--------------------------------------------------------------------------
+#  enumerating Fuse Register
+''' returns list of fuse register decribed in xml file'''
+def enumerateFuseregister(xmlFilePath):
 
-if __name__ == '__main__':
-    xmltree = Et.parse('sample.xml')
+    xmltree = Et.parse(xmlFilePath)
     root =  xmltree.getroot()
-    #fuse Module
+
+    fuseRegisterList = {}
+
+    # fuse Module
     valueGroupDict = getValueGroupDict(root, "./modules/module/[@name='FUSE']//value-group")
-    
-    fuseRegisters_node =   root.findall("./modules/module/[@name='FUSE']//register")
-    
-    for registerNode in fuseRegisters_node:
-        reg = register(registerNode.attrib)
-        bitFields = []
+
+    # fuse register nodes in xml file
+    fuseRegisters_nodes =   root.findall("./modules/module/[@name='FUSE']//register")
+
+    for registerNode in fuseRegisters_nodes:
+        # print registerNode.attrib
+        newFuseRegister = avrRegister(registerNode.attrib)
+
+        bitFieldList = []
         for bitfieldNode in registerNode.findall('./bitfield'):
-            attr = bitfieldNode.attrib
-            if attr.has_key('values') and valueGroupDict.has_key(attr['values']):
-                bf = bitfeild(reg, attr, valueGroupDict[attr['values']])
+            bitFieldAttrib = bitfieldNode.attrib
+            if bitFieldAttrib.has_key('values') and valueGroupDict.has_key(bitFieldAttrib['values']):
+                # bitfield is a group value
+                bitFieldList.append(bitfeild(newFuseRegister, bitFieldAttrib, valueGroupDict[bitFieldAttrib['values']]))
             else:
-                bf = bitfeild(reg,attr)
-            bitFields.append(bf)
-print GlobalregisterDict
+                # bitfield is single bit
+                bitFieldList.append(bitfeild(newFuseRegister,bitFieldAttrib))
+        
+        fuseRegisterList[newFuseRegister.name] = newFuseRegister
+
+    return fuseRegisterList
+
+#-----------------------------------------------------------------------------
