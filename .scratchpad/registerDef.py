@@ -15,6 +15,22 @@ class Bitfeild:
         # updating parent register
         parrentRegister.bitfields[self.name] = self
 
+
+    def __str__(self):
+        strpat = 'invalid'
+        if not self.values:
+        # bitfield is a single bitfield
+            strpat =  '| {}\t[{}]\t{}\n'.format(self.name,'x',self.caption)
+        else:
+        #  is a group of valuse'
+            strpat = '| {}\t{}\n'.format(self.name,self.caption)
+            for value in self.values:
+                strpat += '|\t\t > {}\t{}\t[{}]\n'.format(value['name'],value['caption'],value['value'])
+        return strpat + '| ' + '-' * 70 + '\n'
+
+    def isSingleBit(self):
+        return self.values == None
+
 class AvrRegister:
 
     '''tracker of all registers initialised '''
@@ -31,3 +47,10 @@ class AvrRegister:
         self.bitfields = {}
         
         AvrRegister.GlobalregisterDict[self.name] = self
+
+    def __str__(self):
+        strVal = '{} {}\t{} {} \n'.format('='*50 ,self.name,self.caption,'='*50)
+        for _,bitfield in self.bitfields.items():
+            strVal += str(bitfield).replace('|','\t|')
+        return strVal + '_'*100 + '\n'
+
