@@ -1,5 +1,5 @@
 import sys,time
-from PyQt5.QtWidgets import QApplication, QWidget,QLabel,QComboBox
+from qtpy.QtWidgets import QApplication, QWidget,QLabel, QComboBox
 
 
 if __name__ == '__main__':

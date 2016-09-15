@@ -1,7 +1,6 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QWidget, QLCDNumber, QSlider, 
-    QVBoxLayout, QApplication)
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import (QWidget, QLCDNumber, QSlider, QVBoxLayout, QApplication)
 
 
 class Example(QWidget):

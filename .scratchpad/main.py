@@ -1,8 +1,8 @@
-from avrXMLparser import *
+from avrXMLparser import enumerateFuseregister
 
 
 fuseRegisterDict = enumerateFuseregister('sample.xml')
-#print fuseRegisterDict
+print fuseRegisterDict
 
 
 # for fusereg in fuseRegisterList:

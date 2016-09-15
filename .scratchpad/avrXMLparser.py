@@ -1,3 +1,8 @@
+"""
+    parses avr xml file and generate a dictionary
+"""
+
+
 import xml.etree.ElementTree  as Et
 from registerDef import *
 
@@ -16,6 +21,7 @@ def getValueGroupDict(node,path):
 
 #--------------------------------------------------------------------------
 #  enumerating Fuse Register
+
 ''' returns list of fuse register decribed in xml file'''
 def enumerateFuseregister(xmlFilePath):
 
@@ -32,17 +38,17 @@ def enumerateFuseregister(xmlFilePath):
 
     for registerNode in fuseRegisters_nodes:
         # print registerNode.attrib
-        newFuseRegister = avrRegister(registerNode.attrib)
+        newFuseRegister = AvrRegister(registerNode.attrib)
 
         bitFieldList = []
         for bitfieldNode in registerNode.findall('./bitfield'):
             bitFieldAttrib = bitfieldNode.attrib
             if bitFieldAttrib.has_key('values') and valueGroupDict.has_key(bitFieldAttrib['values']):
                 # bitfield is a group value
-                bitFieldList.append(bitfeild(newFuseRegister, bitFieldAttrib, valueGroupDict[bitFieldAttrib['values']]))
+                bitFieldList.append(Bitfeild(newFuseRegister, bitFieldAttrib, valueGroupDict[bitFieldAttrib['values']]))
             else:
                 # bitfield is single bit
-                bitFieldList.append(bitfeild(newFuseRegister,bitFieldAttrib))
+                bitFieldList.append(Bitfeild(newFuseRegister,bitFieldAttrib))
         
         fuseRegisterList[newFuseRegister.name] = newFuseRegister
 
