@@ -1,6 +1,7 @@
 '''
     contains Bitfeild and register class definitions
 '''
+
 class Bitfeild:
     
     def __init__(self, parrentRegister, attrib, values = None):
@@ -29,7 +30,7 @@ class Bitfeild:
         return strpat + '| ' + '-' * 70 + '\n'
 
     def isSingleBit(self):
-        return self.values == None
+        return (self.values == None)
 
 class AvrRegister:
 
@@ -53,4 +54,3 @@ class AvrRegister:
         for _,bitfield in self.bitfields.items():
             strVal += str(bitfield).replace('|','\t|')
         return strVal + '_'*100 + '\n'
-

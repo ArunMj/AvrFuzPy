@@ -2,13 +2,15 @@
     parses avr xml file and generate a dictionary
 """
 
-
 import xml.etree.ElementTree  as Et
-from registerDef import *
+from RegisterDef import AvrRegister,Bitfeild
+import DeviceInfo 
+
+
 
 '''returns value-group as dictionary from given path glob
     format {groupname: [{caption:,name:,value:},,,]}'''
-def getValueGroupDict(node,path):
+def _getValueGroupAsDict(node,path):
     valueGroups = {}
     for valueGroupnode in node.findall(path):
         values = []
@@ -19,19 +21,24 @@ def getValueGroupDict(node,path):
     # print valueGroups
     return valueGroups
 
+
+
+ 
 #--------------------------------------------------------------------------
 #  enumerating Fuse Register
 
-''' returns list of fuse register decribed in xml file'''
-def enumerateFuseregister(xmlFilePath):
+''' generate list of fuse registers decribed in xml file
+    it will update DeviceInfo.fuseRegisters tuple
+'''
+def _getFuseregisters():
 
-    xmltree = Et.parse(xmlFilePath)
+    xmltree = Et.parse(DeviceInfo.xmlFilePath)
     root =  xmltree.getroot()
 
     fuseRegisterList = {}
 
     # fuse Module
-    valueGroupDict = getValueGroupDict(root, "./modules/module/[@name='FUSE']//value-group")
+    valueGroupDict = _getValueGroupAsDict(root, "./modules/module/[@name='FUSE']//value-group")
 
     # fuse register nodes in xml file
     fuseRegisters_nodes =   root.findall("./modules/module/[@name='FUSE']//register")
@@ -52,6 +59,13 @@ def enumerateFuseregister(xmlFilePath):
         
         fuseRegisterList[newFuseRegister.name] = newFuseRegister
 
-    return fuseRegisterList
+        DeviceInfo.fuseRegisters = fuseRegisterList
+
+
+
+def parseAndUpdate():
+    _getFuseregisters()
+    for fusereg in DeviceInfo.fuseRegisters:
+        pass
 
 #-----------------------------------------------------------------------------

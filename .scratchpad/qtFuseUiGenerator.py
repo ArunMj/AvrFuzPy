@@ -1,11 +1,13 @@
 import avrXMLparser
-from qtpy.QtWidgets import (QWidget,QLabel, QVBoxLayout,QComboBox,QApplication, QCheckBox)
+import registerDef
+from qtpy.QtWidgets import (QWidget,QLabel, QVBoxLayout,QComboBox,QApplication, QCheckBox,QPushButton,QHBoxLayout)
 
 fuseRegisterDict = avrXMLparser.enumerateFuseregister('sample.xml')
 
 
-class QtRegisterView():
-    def __init__(self):
+class QtRegisterBitwiseView(QVBoxLayout):
+    def __init__(self,AvrRegister):
+        
         pass
         
 
@@ -32,8 +34,6 @@ if __name__ == '__main__':
             qtBitfieldViewList.append(comboBox)
 
 
-
-
     w = QWidget()   
     w.setGeometry(500,500,100,150)
     w.setWindowTitle("testing UI")
@@ -43,5 +43,12 @@ if __name__ == '__main__':
         vbox.addWidget(i)
         i.show()
         print i
+
+    vboxInner = QHBoxLayout()
+    vboxInner.addWidget(QPushButton())
+    vboxInner.addWidget(QPushButton())
+    vboxInner.addWidget(QPushButton())
+    vbox.addLayout(vboxInner)
+
     w.setLayout(vbox)
     sys.exit(app.exec_())
